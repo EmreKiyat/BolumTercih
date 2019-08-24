@@ -1,0 +1,112 @@
+﻿@{
+    ViewBag.Title = "Bolum";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+ }
+<script type='text/javascript' > 
+    var ssPage;
+</script>
+<script src="~/JS/Bolum.js"></script>
+
+<script id="BolumTXListType" type="text/x-handlebars-template">
+    {{#each Data}}
+      <tr id="{{tId}}">
+        <td><span style="color:#008080">{{BK}}</span>&nbsp;&nbsp;&nbsp;<span>{{Ad}}</span><br /><span class="mic-info">{{Uni}}</span></td>
+        <td>{{DV}}</td>
+        <td class='TextCenter'>{{PT}}</td>
+        <td>{{SU}} Yıl</td>
+        <td class='TextCenter'>{{Kontenjan}}</td>
+        <td class='TextRight'>{{{ifEKP SR}}}</td>
+        <td class='TextRight'>{{{ifEKP EKP}}}</td>
+        <td class='TextRight'>{{Kosullar}}</td>
+      </tr>
+    {{/each}}
+</script>
+
+<script type='text/javascript' >
+    Handlebars.registerHelper('ifEKP', function (txt) {
+        if (txt == "0") return "- - - -"; else return txt;
+    });
+
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+    window.fbAsyncInit = function () {
+        FB.init({
+            appId: '338334836292077',
+            xfbml: true,
+            version: 'v2.1'
+        });
+    };
+
+    $('#share_button').click(function (e) {
+e.preventDefault();
+FB.ui(
+{
+method: 'feed',
+name: 'BolumTercih.com - Geleceğini Seç',
+link: 'http://www.bolumtercih.com',
+picture: '~/Content/Img/bolumTercih.png',
+caption: 'BolumTercih.com - Geleceğini Seç',
+    description: 'Bölümlerinizi seçin, sıralayın, bölüm bilgilerine ulaşın, paylaşın.',
+    message: ''
+});
+});
+});
+</script>
+
+
+
+        <div class="row" style="margin-top:1em; min-height:55em">
+<!--<div style="border:1px solid #ccc;height:6em;width:100%;margin-bottom:0,4em"></div>-->
+<h2>Bölümler</h2>
+      <!--  <a href="#" id = "share_button">Paylaş</a> -->
+        
+<div class="[ col-xs-12 col-sm-10 col-md-10 ]">
+
+<div class="input-group" style="margin-top:1em; margin-bottom:2em; ">
+
+                <input type="hidden" name="search_param" value="all" id="search_param">         
+                <input type="text" class="form-control" id="txtAra" placeholder="Bölüm Adı...">
+                <span class="input-group-btn">
+                    <button id="btnAra" class="btn btn-custom" type="button">Ara!</button>
+                </span>
+            </div>
+
+
+<div class="[ col-xs-12 col-sm-12 col-md-12 ]" >
+
+
+<table class="table table-hover table-striped table-condensed">
+      <thead id="tHead" class="TableHeadColor hidden">
+      <tr>
+        <th>Bölüm</th>
+        <th>Devlet/Vakıf</th>
+        <th>P. Tür</th>
+        <th>Süre</th>
+        <th>Kontenjan</th>        
+        <th>B. Sıra</th>
+        <th>E.K.Puan</th>
+        <th>Koşullar</th>
+      </tr>
+    </thead>
+    <tbody id="bolumTX">
+
+
+    </tbody>
+</table>
+<a href="#" id="blmRight" class="btn btn-default btn-sm hidden" role="button" style="float:right"> İleri <i class="fa fa-chevron-right"></i></a>
+<a href="#" id="blmLeft"  class="btn btn-default btn-sm disabled hidden" role="button" style="float:right"><i class="fa fa-chevron-left"></i> Geri</a>
+
+<img id="loadingimg" class="hidden" src="~/Content/Img/load.gif"/>
+</div>
+
+
+</div>
+<div class="[ col-sm-2 col-md-2 ]">
+<div  style="border:1px solid #ccc; width:160px;height:600px;background-color:#eee">
+                </div>
+
+</div>
+
+        </div>

@@ -1,0 +1,93 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Bölüm Tercih - Geleceğini Seç</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width" />
+<meta name="keywords" content="devlet üniversiteleri, vakıf üniversiteleri, tercih, robot, taban puanlar, başarı sırası, lys, ösym, mühendislik, hukuk, odtü, itü, istanbul üniversiteleri, tıp" />
+<meta name="description" content="Üniversite bölüm tercih rehberi, bölüm tercih listeni oluştur, geleceğini seç." />
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.min.js"></script>    
+    <script src="~/JS/touch-punch.min.js"></script>
+
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome-4.3.0/css/font-awesome.min.css" rel="stylesheet" />
+
+<script id="bolumTemplate" type="text/x-handlebars-template">
+        <div class="bolumKart">
+                        <div class="bolumKartLeft">{{sira}}</div>
+                        <div class="bolumKartMid">
+                            <h4 style="margin-bottom:0;">{{bolum}}</h4>
+                            <span>{{univ}}</span>
+                            <p>
+                                <span class="label label-default" title="Puan Türü">{{tur}}</span>
+                                <span class="label label-default" title="Devlet-Vakıf">{{DevVak}}</span>
+                                <span class="label label-warning" title="Sıra(2014)">{{bolumSira}}</span>
+                                <span class="label label-warning" title="En Küçük Puan(2014)">315.12218</span>
+                            </p>
+                        </div>
+                        <div class="bolumKartRight">
+
+                            <span class="glyphicon glyphicon-remove"></span>
+                            <span class="glyphicon glyphicon-chevron-up"></span>
+                            <span class="glyphicon glyphicon-chevron-down"></span>
+
+
+                        </div>
+                    </div>  
+
+</script>
+
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+
+    </script>
+
+
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <img src="~/Content/Img/bolumTercih.png" alt="Bölüm Tercih" />
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav" style="vertical-align:bottom; margin-left:8em;color:#fceedd">
+                    <li><a href="/Home"><h3 style="margin:0;"><small><strong>Tercih Listem</strong></small></></h3></a></li>
+                    <li><a href="/bolum"><h3 style="margin:0;"><small><strong>Bölümler</strong></small></></h3></a></li>
+                    <li><a href="/universite"><h3 style="margin:0;"><small><strong>Üniversiteler</strong></small></></h3></a></li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="container body-content" style="background-color:#fdfdfd; margin-top:5em">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p><span>&copy; @DateTime.Now.Year - BolumTercih.Com</span><span class="pull-right"><a href="/Gizlilik">Gizlilik Sözleşmesi</a></span><span class="pull-right" style="margin-right:25px;"><a href="/Iletisim">İletişim</a></span></p>
+        </footer>
+    </div>
+
+</body>
+</html>

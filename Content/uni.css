@@ -1,0 +1,72 @@
+﻿.thumbnail {
+    position: relative;
+    padding: 4px;
+    padding-bottom:1px;
+    margin-bottom: 20px;
+    height:23em;
+
+}
+    .thumbnail div .col-md-2{
+        height:4em;
+        margin: 0 auto;
+    }
+    .thumbnail div .col-md-10{
+        height:4em;
+    }
+.thumbnail div img {
+    width: auto;
+    height:auto;
+}
+.thumbnail .caption {
+  padding: 4px;
+      padding-bottom:1px;
+  color: #333333;
+  text-align:center;
+}
+    .thumbnail #tUniv {
+    height:4.5em;overflow:hidden;
+    }
+    .thumbnail hr {
+    margin:3px;
+    }
+
+  .thumbnail #tHr {
+    margin-bottom:8px;
+    }
+    
+
+  .bottom-align-text {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+  }
+.uDetPanel {
+    color:rgb(23, 109, 179);
+    margin-bottom:5px;
+    margin-top:12px;
+}
+.panel-body {
+    height:30em;
+}
+.panel-body > table > tbody > tr:first-child > td {
+    border: none;
+}
+.panel-body > table.aLft > tbody > tr > td:nth-child(2) {
+    text-align:right;
+}
+
+.alert {
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid #eed3d7;
+  border-radius: 4px;
+  position: absolute;
+  bottom: 0px;
+  right: 21px;
+  float: right;
+  clear: right;
+}
+.cUniType1
+{
+    height:4em;
+}

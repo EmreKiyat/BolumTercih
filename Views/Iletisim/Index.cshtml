@@ -1,0 +1,63 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using CaptchaMvc.HtmlHelpers   
+@using BolumTer;   
+@using CaptchaMvc;   
+   
+@model BolumTer.Models.Feedback   
+   
+@{   
+    ViewBag.Title = "Index";   
+}   
+   
+@using (Html.BeginForm("Index","Iletisim")) {   
+
+
+<script type='text/javascript'>
+    $(function () {
+
+        var local = window.localStorage;
+        LocalId = local.getItem("LocalId");
+        if (LocalId == null) {
+            $("#cid").val("0");
+        }
+        if (LocalId != null) $("#cid").val(LocalId);
+        console.log(LocalId);
+    });
+</script>
+    <fieldset>   
+        <legend>İletişim Formu</legend>   
+   
+<p>Her türlü görüş, öneri ve hata bildirimlerinizi bize yazın;</p>
+        <div class="editor-label">   
+
+                       
+            <label>E-Posta :</label>
+        </div>   
+        <div class="editor-field">   
+                <input id="cmail" style="width:44em" type="email" maxlength="200" name="EMail" required />
+
+
+        </div>   
+   <input id="cid" class="hidden" name="localId" value="2" />
+        <div class="editor-label">   
+                <label>İleti:</label>
+        </div>   
+        <div class="editor-field">   
+                <textarea id="ccomment" name="comment" style="width:44em;height:15em;" maxlength="1000" required></textarea>
+        </div>   
+      
+        @Html.Captcha(3)
+         <br />   
+        <p class="Error">  @ViewBag.ErrMessage </p>   
+        <p>   
+            <input type="submit" class="btn-custom" value="Gönder" />   
+        </p>   
+    </fieldset>  
+<div style="margin-bottom:16em;"></div> 
+
+
+}  

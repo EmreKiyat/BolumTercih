@@ -1,0 +1,470 @@
+﻿@{
+    Layout ="~/Views/Shared/_Layout.cshtml";
+}
+<script type='text/javascript' > 
+    var myListStr="";
+    var LocalId;
+    //window.localStorage.clear();
+    var myFilterResult;
+    var ssPage;
+    var numberOfBolumReturned;
+    var bosListText = "<div class='bosListText'><h3>Bolümlerini ekle.</h3><ul style='line-height:200%'><li>Sağ taraftaki arama filtresini ilgi alanlarına göre düzenle.</li><li>Aramanı yap (Birşey girmeden Ara'ya basarak sadece filtreye göre de arama yapabilirsin).</li><li>İstediğin bölümleri tercih listene ekle.</li><li>Mouse ile tutup sürükleyerek ya da ok tuşlarıyla bölüm sıralamanı yapabilirsin.</li><li>Bölüm detayını görmek için üzerine tıkla.</li><li>Tercih listeni kaydetmeyi unutma.</li></ul></div>"
+    var LastRight = "dvSearchAndFilter";
+    var filterObj = {
+        "PG": 1,
+        "TX": "",
+        "DV": [{ "Id": "1", "T": "Devlet" }, { "Id": "10", "T": "Devlet(İÖ)" }, { "Id": "2", "T": "Vakıf(Tam Burslu)" }, { "Id": "3", "T": "Vakıf(%75 Burslu)" }],
+        "PT": [{ "Id": "37", "T": "MF-2" }, { "Id": "39", "T": "MF-4" }, { "Id": "42", "T": "TM-3" }, { "Id": "44", "T": "TS-2" }, ],
+        "SH": [{ "Id": "169", "T": "İstanbul" }, { "Id": "136", "T": "Ankara" }, { "Id": "170", "T": "İzmir" }, { "Id": "161", "T": "Eskişehir" }, ]
+    };
+</script>
+
+<script id="BolumListType" type="text/x-handlebars-template">
+    {{#each Data}}
+    <div class="bolumKart" id="{{tId}}">
+        <div class="bolumKartLeft">{{Sira}}</div>
+        <div class="bolumKartMid">
+            <h5 title="{{BolumKodu}}">{{Ad}}</h5>
+            <span class="lblUniv" title="{{Fakulte}}">{{Uni}}</span>
+            <p>
+                <span class="label label-default" title="Puan Türü">{{PT}}</span>
+                <span class="label label-warning" title="Devlet-Vakıf">{{DV}}</span>
+                <span class="label label-default" title="Sıra(2014)">{{{ifEKP SR}}}</span>
+                <span class="label label-warning" title="En Küçük Puan(2014)">{{{ifEKP EKP}}}</span>
+                <span class="label label-default" title="Koşullar">{{Kosullar}}</span>
+                <span class="hidden">- {{Sure}} Yıl -</span>
+                <span class="hidden">{{Knt}}</span>
+
+
+            </p>
+        </div>
+        <div class="bolumKartRight">
+            <a href="#"><span class="fa fa-remove fa-fw"></span></a>
+            <a href="#"><span class="fa fa-caret-up fa-fw"></span></a>
+            <a href="#"><span class="fa fa-caret-down fa-fw"></span></a>
+        </div>
+    </div>
+    {{/each}}
+   
+</script>
+
+<script id="BolumFilterType" type="text/x-handlebars-template">
+    {{#each Data}}
+  <div class="list-group-item bolumMargin">
+    <table style="table-layout: fixed;width:100%">
+        <tr><td class="bolumWidthL bolumColor"><strong>{{Ad}}</strong></td><td class="bolumWidthR"><span class="text-right bolumColorPT" style="width:100%">{{PT}}</span></td></tr>
+        <tr><td class="bolumWidthL bolumFont12">{{Uni}}</td><td class="bolumWidthR text-right"><a href="#" class="bolumAdd" id="{{tId}}">Ekle</a></td></tr>
+    </table>
+  </div>
+    {{else}}
+    <p style="margin:5px;">Aradığınız bölüm bulunamadı; arama metninizi ve filtre seçimlerinizi kontrol edin,
+    <ul>
+        <li>Üniversite türü,</li>
+        <li>Puan Türü,</li>
+        <li>Şehir</li>
+    </ul>
+filtre seçimleriniz aradığınız bölümü kapsamıyor olabilir.
+</p>
+    {{/each}}
+</script>
+<script id="KosulType" type="text/x-handlebars-template"> 
+    {{#each Data}}
+    <h4 class="text-center text-primary"><strong>- {{Kosul}} -</strong></h4>
+    <p>{{Detay}}</p>
+    {{/each}}
+</script>
+<script type='text/javascript' >
+    Handlebars.registerHelper('ifEKP', function (txt) {
+        if (txt == "0") return "- - - -"; else return txt;
+    });
+    function sortKartOrder() {
+        var k = 0;
+        myList = [];
+        $('#sortable').children('div .bolumKart').each(function (i, element) {
+            k++;
+            $(element).find('.bolumKartLeft').html(k);
+            var item = {}
+            item["Id"] = $(element).attr('id');
+            myList.push(item);
+
+        });
+        $("#numOfBolum").html(k);
+        myListStr = JSON.stringify(myList);
+    }
+</script>
+
+<script src="~/JS/forSortable.js?v1"></script>
+<script src="~/JS/btHome.js?v5"></script>
+
+
+        <div class="row" style="margin-top:1em">
+
+@*        <div style="border:1px solid #ccc;height:9em;width:100%;padding-bottom:0,4em"><a href="#0" class="cd-btn">Fire Panel</a></div>*@
+
+            <div class="[ col-xs-12 col-sm-6 col-md-6 ]" style="border:1px solid #ccc;min-height:90em;padding-bottom:2em;" >
+
+
+
+<table style="margin:1em;width:96%;">
+<tr>
+   <td style="width:70%;border:thin"> <h2 style="margin-bottom:0;">Tercih Listem</h2><img id="loadingimg" class="hidden" src="~/Content/Img/load.gif"/><span id="spnTarih" class="mic-info"> 11 Ocak 2013</span></td>
+    <td style="width:2%;"></td>
+    <td style="width:28%;border:thin;text-align:right;">
+        <button type="button" class="btn btn-custom" id="btnKaydet">Kaydet</button><button type="button" id="btnYaz" style="margin-left:5px" class="btn btn-default">Yazdır</button>
+        <span class="mic-info"> <span id="numOfBolum">0</span><span> Bölüm</span></span>
+    </td>
+ </tr>   
+
+</table>
+   
+
+                <div id="sortable">
+                
+
+                </div> 
+                
+
+            </div>
+            <div class="[ col-sm-4 col-md-4 ]">
+
+<div id="dvBolumByFilter" class="cd-panel from-right hidden rightPanel arkaRenk">
+	
+<a href="#" style="float:right" id="btnFilterClose" title="Kapat" class="cd-panel-close"><i class="fa fa-close"></i></a>
+		<h2>Bölümler</h2><img id="loadingimgR" style="float:left;" src="~/Content/Img/load.gif"/><hr />
+
+
+<a href="#" id="blmLeft"  class="btn btn-default btn-sm disabled" role="button"><i class="fa fa-chevron-left"></i> Geri</a>
+<a href="#" id="blmRight" class="btn btn-default btn-sm" role="button" style="float:right"> İleri <i class="fa fa-chevron-right"></i></a>
+<div id="bolumTree" class="list-group">
+
+
+</div>
+
+
+</div> <!-- cd-panel -->
+
+<div id="dvBolumDetay" class="cd-panel from-right rightPanel arkaRenk hidden">
+   <a href="#" style="float:right" id="btnDetayClose" title="Kapat"><i class="fa fa-close"></i></a>
+    <h5 class="text-center" id="dtBK" style="margin-bottom:0;color:#b0b0b0;">100110036</h5>
+    <h4 class="text-center altRenkBlue" id="dtBL" style="margin-bottom:0">Department of Physics</h4>
+    <h4 class="text-center" id="dtFK" style="margin:0"><small>Faculty of Art and Science</small></h4>
+    <h4 class="text-center" id="dtUN" style="margin:0"><small>Middle East Technical University</small></h4>
+    <h5 id="dtDV" class="text-center altRenk">Vakıf(%75 Burslu)</h5>
+    <h5 id="dtSU" class="text-center altRenkBlue">- 4 Yıl -</h5>
+<hr />
+    <h4 id="dtPT" class="text-center ">MF - 4</h4><hr />
+
+    <h4 class="text-center marbot0"><small>Kontenjan</small></h4><hr class="martop0 marbot0" style="width:40%" />
+    <h3 id="dtptKN" class="text-center martop0" style="margin-top:0;">72</h3>
+    <h4 class="text-center marbot0"><small>Başarı Sırası</small></h4><hr class="martop0 marbot0" style="width:40%" />
+    <h3 id="dtBS" class="text-center martop0">233.454</h3>
+    <h4 class="text-center marbot0"><small>En Küçük Puan</small></h4><hr class="martop0 marbot0" style="width:40%" />
+    <h3 id="dtEK" class="text-center martop0">233.454</h3>
+<hr />
+    <h3 class="text-center marbot0 altRenkRed">Koşullar</h3><hr class="martop0 marbot0" style="width:40%" />
+    <div id="dvKosullar">
+
+    </div>
+</div>
+
+<div id="dvSearchAndFilter" class="rightPanel">
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="input-group" style="padding-bottom:1em; padding-top:1em; ">
+                                <input id="txtAra" type="text" class="form-control" placeholder="Bölüm Adı">
+                                <span class="input-group-btn">
+                                    <button id="btnAra" class="btn btn-custom" type="button">Ara!</button>
+                                </span>
+                            </div><!-- /input-group -->
+                        </div><!-- /.col-lg-6 -->
+                    </div><!-- /.row -->
+
+                    <!--***********************-->
+
+                        <div class="panel panel-default">
+                    <div class="panel-heading">
+                            <i class="fa fa-cubes fa-fw"></i><span class="panelHead">&nbsp;Devlet-Vakıf</span>
+                            <div class="btn-group pull-right">
+                                <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                                    <i class="fa fa-chevron-down"></i>
+                                </button>
+                                
+
+                                <ul class="dropdown-menu slidedown" id="cmbDV">
+                                    <li id="1"><a href="#"><i class="fa fa-fw"></i> Devlet</a></li>
+                                    <li id="10"><a href="#"><i class="fa fa-fw"></i> Devlet(İÖ)</a></li>
+                                    <li id="11"><a href="#"><i class="fa fa-fw"></i> Devlet(UOLP-Ücretli)</a></li>
+                                    <li class="divider"></li>
+                                    <li id="2"><a href="#"><i class="fa fa-fw"></i>Vakıf (Tam Burslu)</a></li>
+                                    <li class="divider"></li>
+                                    <li id="3"><a href="#"><i class="fa fa-fw"></i> Vakıf (75% Burslu)</a></li>
+                                    <li id="4"><a href="#"><i class="fa fa-fw"></i> Vakıf (50% Burslu)</a></li>
+                                    <li id="5"><a href="#"><i class="fa fa-fw"></i> Vakıf (25% Burslu)</a></li>
+                                    <li id="6"><a href="#"><i class="fa fa-fw"></i> Vakıf (Ücretli)</a></li>
+                                    <li class="divider"></li>
+                                    <li id="7"><a href="#"><i class="fa fa-fw"></i> KKTC</a></li>
+                                    <li id="8"><a href="#"><i class="fa fa-fw"></i> Yurtdışı</a></li>
+                                </ul>
+
+
+                            </div>
+                        </div>
+                          <div class="panel-body" id="pnlDV">
+
+
+                          </div>
+                        </div>
+
+                        <div class="panel panel-default">
+
+<div class="panel-heading">
+                            <i class="fa fa-book fa-fw"></i><span class="panelHead">&nbsp;Puan Türü</span>
+                            <div class="btn-group pull-right">
+                                <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                                    <i class="fa fa-chevron-down"></i>
+                                </button>
+
+                            <ul class="dropdown-menu slidedown" id="cmbPuanTur">
+                                                                <li id="30"><a href="#"><i class="fa fa-fw"></i> YGS-1</a></li>
+                                                                <li id="31"><a href="#"><i class="fa fa-fw"></i> YGS-2</a></li>
+                                                                <li id="32"><a href="#"><i class="fa fa-fw"></i> YGS-3</a></li>
+                                                                <li id="33"><a href="#"><i class="fa fa-fw"></i> YGS-4</a></li>
+                                                                <li id="34"><a href="#"><i class="fa fa-fw"></i> YGS-5</a></li>
+                                                                <li id="35"><a href="#"><i class="fa fa-fw"></i> YGS-6</a></li>
+                                                                <li class="divider"></li>
+                                                                <li id="36"><a href="#"><i class="fa fa-fw"></i> MF-1</a></li>
+                                                                <li id="37"><a href="#"><i class="fa fa-fw"></i> MF-2</a></li>
+                                                                <li id="38"><a href="#"><i class="fa fa-fw"></i> MF-3</a></li>
+                                                                <li id="39"><a href="#"><i class="fa fa-fw"></i> MF-4</a></li>
+                                                                <li class="divider"></li>
+                                                                <li id="40"><a href="#"><i class="fa fa-fw"></i> TM-1</a></li>
+                                                                <li id="41"><a href="#"><i class="fa fa-fw"></i> TM-2</a></li>
+                                                                <li id="42"><a href="#"><i class="fa fa-fw"></i> TM-3</a></li>
+                                                                <li class="divider"></li>
+                                                                <li id="43"><a href="#"><i class="fa fa-fw"></i> TS-1</a></li>
+                                                                <li id="44"><a href="#"><i class="fa fa-fw"></i> TS-2</a></li>
+                                                                <li class="divider"></li>
+                                                                <li id="45"><a href="#"><i class="fa fa-fw"></i> DİL-1</a></li>
+                                                                <li id="46"><a href="#"><i class="fa fa-fw"></i> DİL-2</a></li>
+                                                                <li id="47"><a href="#"><i class="fa fa-fw"></i> DİL-3</a></li>
+
+                                                            </ul>
+                            </div>
+                        </div>                        
+
+                          <div class="panel-body" id="pnlPT">
+
+                          </div>
+                        </div>
+
+                        <div class="panel panel-default">
+
+<div class="panel-heading">
+                            <i class="fa fa-plane fa-fw"></i><span class="panelHead">&nbsp;Şehirler</span>
+                            <div class="btn-group pull-right">
+                                <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                                    <i class="fa fa-chevron-down"></i>
+                                </button>
+                                <ul class="dropdown-menu slidedown" id="cmbSehir">
+<li id='130'><a href='#'><i class='fa fa-fw'></i>Adana </a></li>
+<li id='131'><a href='#'><i class='fa fa-fw'></i>Adıyaman</a></li>
+<li id='132'><a href='#'><i class='fa fa-fw'></i>Afyonkarahisar</a></li>
+<li id='133'><a href='#'><i class='fa fa-fw'></i>Ağrı</a></li>
+<li id='134'><a href='#'><i class='fa fa-fw'></i>Aksaray</a></li>
+<li id='135'><a href='#'><i class='fa fa-fw'></i>Amasya</a></li>
+<li class="divider"></li>
+<li id='136'><a href='#'><i class='fa fa-fw'></i>Ankara</a></li>
+<li id='137'><a href='#'><i class='fa fa-fw'></i>Antalya</a></li>
+<li id='138'><a href='#'><i class='fa fa-fw'></i>Ardahan</a></li>
+<li id='139'><a href='#'><i class='fa fa-fw'></i>Artvin</a></li>
+<li id='140'><a href='#'><i class='fa fa-fw'></i>Aydın</a></li>
+<li id='141'><a href='#'><i class='fa fa-fw'></i>Balıkesir</a></li>
+<li id='142'><a href='#'><i class='fa fa-fw'></i>Bartın</a></li>
+<li id='143'><a href='#'><i class='fa fa-fw'></i>Batman</a></li>
+<li id='144'><a href='#'><i class='fa fa-fw'></i>Bayburt</a></li>
+<li id='145'><a href='#'><i class='fa fa-fw'></i>Bilecik</a></li>
+<li id='146'><a href='#'><i class='fa fa-fw'></i>Bingöl</a></li>
+<li id='147'><a href='#'><i class='fa fa-fw'></i>Bitlis</a></li>
+<li id='148'><a href='#'><i class='fa fa-fw'></i>Bolu</a></li>
+<li id='149'><a href='#'><i class='fa fa-fw'></i>Burdur</a></li>
+<li id='150'><a href='#'><i class='fa fa-fw'></i>Bursa</a></li>
+<li id='151'><a href='#'><i class='fa fa-fw'></i>Çanakkale</a></li>
+<li id='152'><a href='#'><i class='fa fa-fw'></i>Çankırı</a></li>
+<li id='153'><a href='#'><i class='fa fa-fw'></i>Çorum</a></li>
+<li id='154'><a href='#'><i class='fa fa-fw'></i>Denizli</a></li>
+<li id='155'><a href='#'><i class='fa fa-fw'></i>Diyarbakır</a></li>
+<li id='156'><a href='#'><i class='fa fa-fw'></i>Düzce</a></li>
+<li id='157'><a href='#'><i class='fa fa-fw'></i>Edirne </a></li>
+<li id='158'><a href='#'><i class='fa fa-fw'></i>Elazığ</a></li>
+<li id='159'><a href='#'><i class='fa fa-fw'></i>Erzincan</a></li>
+<li id='160'><a href='#'><i class='fa fa-fw'></i>Erzurum</a></li>
+<li class="divider"></li>
+<li id='161'><a href='#'><i class='fa fa-fw'></i>Eskişehir</a></li>
+<li id='162'><a href='#'><i class='fa fa-fw'></i>Gaziantep</a></li>
+<li id='163'><a href='#'><i class='fa fa-fw'></i>Giresun</a></li>
+<li id='164'><a href='#'><i class='fa fa-fw'></i>Gümüşhane</a></li>
+<li id='165'><a href='#'><i class='fa fa-fw'></i>Hakkari</a></li>
+<li id='166'><a href='#'><i class='fa fa-fw'></i>Hatay</a></li>
+<li id='167'><a href='#'><i class='fa fa-fw'></i>Iğdır</a></li>
+<li id='168'><a href='#'><i class='fa fa-fw'></i>Isparta</a></li>
+<li class="divider"></li>
+<li id='169'><a href='#'><i class='fa fa-fw'></i>İstanbul</a></li>
+<li class="divider"></li>
+<li id='170'><a href='#'><i class='fa fa-fw'></i>İzmir</a></li>
+<li id='171'><a href='#'><i class='fa fa-fw'></i>Kahramanmaraş</a></li>
+<li id='172'><a href='#'><i class='fa fa-fw'></i>Karabük</a></li>
+<li id='173'><a href='#'><i class='fa fa-fw'></i>Karaman</a></li>
+<li id='174'><a href='#'><i class='fa fa-fw'></i>Kars</a></li>
+<li id='175'><a href='#'><i class='fa fa-fw'></i>Kastamonu</a></li>
+<li id='176'><a href='#'><i class='fa fa-fw'></i>Kayseri</a></li>
+<li id='177'><a href='#'><i class='fa fa-fw'></i>Kırıkkale</a></li>
+<li id='178'><a href='#'><i class='fa fa-fw'></i>Kırklareli</a></li>
+<li id='179'><a href='#'><i class='fa fa-fw'></i>Kırşehir</a></li>
+<li id='180'><a href='#'><i class='fa fa-fw'></i>Kilis</a></li>
+<li id='181'><a href='#'><i class='fa fa-fw'></i>Kocaeli</a></li>
+<li id='182'><a href='#'><i class='fa fa-fw'></i>Konya</a></li>
+<li id='183'><a href='#'><i class='fa fa-fw'></i>Kütahya</a></li>
+<li id='184'><a href='#'><i class='fa fa-fw'></i>Malatya</a></li>
+<li id='185'><a href='#'><i class='fa fa-fw'></i>Manisa</a></li>
+<li id='186'><a href='#'><i class='fa fa-fw'></i>Mardin</a></li>
+<li id='187'><a href='#'><i class='fa fa-fw'></i>Mersin</a></li>
+<li id='188'><a href='#'><i class='fa fa-fw'></i>Muğla</a></li>
+<li id='189'><a href='#'><i class='fa fa-fw'></i>Muş</a></li>
+<li id='190'><a href='#'><i class='fa fa-fw'></i>Nevşehir</a></li>
+<li id='191'><a href='#'><i class='fa fa-fw'></i>Niğde</a></li>
+<li id='192'><a href='#'><i class='fa fa-fw'></i>Ordu</a></li>
+<li id='193'><a href='#'><i class='fa fa-fw'></i>Osmaniye</a></li>
+<li id='194'><a href='#'><i class='fa fa-fw'></i>Rize</a></li>
+<li id='195'><a href='#'><i class='fa fa-fw'></i>Sakarya</a></li>
+<li id='196'><a href='#'><i class='fa fa-fw'></i>Samsun</a></li>
+<li id='197'><a href='#'><i class='fa fa-fw'></i>Siirt</a></li>
+<li id='198'><a href='#'><i class='fa fa-fw'></i>Sinop</a></li>
+<li id='199'><a href='#'><i class='fa fa-fw'></i>Sivas</a></li>
+<li id='200'><a href='#'><i class='fa fa-fw'></i>Şırnak</a></li>
+<li id='201'><a href='#'><i class='fa fa-fw'></i>Tekirdağ</a></li>
+<li id='202'><a href='#'><i class='fa fa-fw'></i>Tokat</a></li>
+<li id='203'><a href='#'><i class='fa fa-fw'></i>Trabzon</a></li>
+<li id='204'><a href='#'><i class='fa fa-fw'></i>Tunceli</a></li>
+<li id='205'><a href='#'><i class='fa fa-fw'></i>Şanlıurfa</a></li>
+<li id='206'><a href='#'><i class='fa fa-fw'></i>Uşak</a></li>
+<li id='207'><a href='#'><i class='fa fa-fw'></i>Van </a></li>
+<li id='208'><a href='#'><i class='fa fa-fw'></i>Yalova</a></li>
+<li id='209'><a href='#'><i class='fa fa-fw'></i>Yozgat</a></li>
+<li id='210'><a href='#'><i class='fa fa-fw'></i>Zonguldak</a></li>
+<li class="divider"></li>
+<li id='211'><a href='#'><i class='fa fa-fw'></i>KKTC</a></li>
+<li class="divider"></li>
+<li id='212'><a href='#'><i class='fa fa-fw'></i>TÜRKİSTAN-KAZAKİSTAN</a></li>
+<li id='213'><a href='#'><i class='fa fa-fw'></i>BİŞKEK-KIRGIZİSTAN</a></li>
+<li id='214'><a href='#'><i class='fa fa-fw'></i>BAKÜ-AZERBAYCAN</a></li>
+<li id='215'><a href='#'><i class='fa fa-fw'></i>NAHCİVAN-AZERBAYCAN</a></li>
+<li id='216'><a href='#'><i class='fa fa-fw'></i>SUMGAYIT-AZERBAYCAN</a></li>
+<li id='217'><a href='#'><i class='fa fa-fw'></i>SARAYBOSNA-BOSNA-HERSEK</a></li>
+<li id='218'><a href='#'><i class='fa fa-fw'></i>TİFLİS-GÜRCİSTAN</a></li>
+<li id='219'><a href='#'><i class='fa fa-fw'></i>BATUM-GÜRCİSTAN</a></li>
+<li id='220'><a href='#'><i class='fa fa-fw'></i>ÜSKÜP-MAKEDONYA</a></li>
+<li id='221'><a href='#'><i class='fa fa-fw'></i>KOMRAT-MOLDOVA</a></li>
+
+
+
+
+                                </ul>
+                            </div>
+                        </div>
+                          <div class="panel-body" id="pnlSH">
+
+
+                          </div>
+                        </div>
+                    <!--***********************-->
+
+
+
+                </div>             
+
+<div style="border:1px solid #ccc; width:336px;height:280px;background-color:#eee;margin-top:1.5em;margin-left:10px"></div>
+            </div>
+            <div class="[ col-sm-2 col-md-2 ]">
+                <div  style="border:1px solid #ccc; width:160px;height:600px;background-color:#eee">
+                </div>
+            </div>
+
+
+<!-- popup -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+        <h4 class="modal-title" id="myModalLabel">Merhaba,</h4>
+      </div>
+      <div class="modal-body">
+        <ul>
+            <li>Bu site adaylara tercih sürecinde yardımcı olmak amacıyla hazırlanmıştır. Adaylar için asıl kaynak, bilginin en doğrusu ve nihai tercihlerini yapacakları ortam <a href="http://www.osym.gov.tr/belge/1-22201/2015-osys-ogrenci-secme-ve-yerlestirme-sistemi.html"  target="_blank">osym.gov.tr</a> adresidir.</li>
+            <li>bolümtercih.com site içerisindeki eksik ve hatalı bilgilerden dolayı oluşabilecek herhangi bir durumdan sorumlu değildir. </li>
+            <li>bolümtercih.com bir üyelik sistemine sahip değildir, oluşturduğun tercih listen, html5 yapılarıyla, kullandığın browser'da tutulur. Bu sebeple sitemiz eski browserleri desteklemeyebilir.</li>
+            
+
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="btnNotOk" class="btn btn-default" data-dismiss="modal">Olmaz Böyle</button>
+        <button type="button" id="btnOk" class="btn btn-primary">Tamam, Sorun Yok</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- popup end-->
+<!--html5 kontrol popup -->
+<div class="modal fade" id="myHtml5Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+
+        <h4 class="modal-title" id="myModalLabel">Merhaba,</h4>
+      </div>
+      <div class="modal-body">
+        <ul>
+            <li>Kullandığın browserın HTML5 desteği bulunmuyor, BolumTercih.com'u kullanabilmek için daha yeni bir browser kullanmalısın. </li>
+            <li>bolümtercih.com bir üyelik sistemine sahip değildir, oluşturduğun tercih listen, html5 yapılarıyla, kullandığın browser'da tutulur. Bu sebeple sitemiz eski browserleri desteklemeyebilir.</li>
+            
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="btnGoFirefox" class="btn btn-primary">Firefox</button>
+        <button type="button" id="btnGoChrome" class="btn btn-primary">google Chrome</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- Modal -->
+@*<div class="modal fade" id="gnModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="gnModalLabel"></h4>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>*@
+
+        </div>
+
+
+
+
+

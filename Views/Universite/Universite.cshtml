@@ -1,0 +1,278 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/JS/Uni.js?v=2"></script>
+<link href="~/Content/uni.css" rel="stylesheet" />
+
+<script>
+    var gSH = "";
+    var gFak = "";
+
+</script>
+
+<script id="BolumTXListType" type="text/x-handlebars-template">
+    {{#each Data}}
+      <tr id="{{bId}}">
+        <td><span style="color:#008080">{{BK}}</span>&nbsp;&nbsp;&nbsp;<span>{{Ad}}</span></td>
+        <td class='TextCenter'>{{PT}}</td>
+        <td>{{SU}} Yıl</td>
+        <td class='TextCenter'>{{Kontenjan}}</td>
+        <td class='TextRight'>{{{ifEKP SR}}}</td>
+        <td class='TextRight'>{{{ifEKP EKP}}}</td>
+        <td class='TextRight'>{{Kosullar}}</td>
+      </tr>
+    {{/each}}
+
+</script>
+
+<script type='text/javascript' >
+    Handlebars.registerHelper('ifEKP', function (txt) {
+        if (txt == "0") return "- - - -"; else return txt;
+    });
+
+</script>
+<script id="UniType1" type="text/x-handlebars-template">
+ {{#each Data}}
+        {{{ifSH S}}}
+        <div class="col-xs-12 col-sm-6 col-md-4">
+          <a id={{Id}} class="thumbnail cUniType1" href="#">
+            <div class="col-md-2">
+                <img src="../Content/UnPng40/{{Id}}.png" />
+            </div>
+              <div class="col-md-10">
+                <span><small>{{U}}</small></span>
+             </div>
+          </a>
+        </div>
+    {{/each}}
+</script>
+
+
+<script id="UniType2" type="text/x-handlebars-template">
+ {{#each Data}}
+        <div class="col-xs-12 col-sm-4 col-md-3">
+          <a id={{Id}} class="thumbnail cUniType2" href="#">
+              <div class="text-center">
+                  <img src="/Content/UnPng108/{{Id}}.png" /></div>
+              <div class="caption">
+              <div id="tUniv">
+                <h4><small><strong>{{U}}</strong></small></h4></div>
+                <hr />
+                <span class="text-center">{{{ifDV DV}}}</span>
+                <hr id="tHr" />
+                <p>
+                    <span><strong>{{O}}</strong></span><span> öğrenci,</span><br />
+                    <span><strong>{{OG}}</strong></span><span> öğretim görevlisi,</span><br />
+                    <span><strong>{{B}}</strong></span><span> bölüm.</span><br />
+
+                <div  class="bottom-aligned-text">
+                    <span><button type="button" onclick="window.open('{{w}}', '_self');" class="btn btn-primary btn-xs">Web</button></span>
+                    <span><button type="button" onclick="window.open('{{aw}}', '_self');" class="btn btn-warning btn-xs">Aday Web</button></span>
+                </div>
+                </p>
+             </div>
+          </a>
+        </div>
+
+    {{/each}}
+</script>
+
+<script id="UniType3" type="text/x-handlebars-template">
+
+@*                    //$("#btnWeb").attr("onclick", "window.open("+res.web+",'_blank');");
+                    //if (res.aWeb.length>5) $("#btnAWeb").attr("onclick", "window.open(" + res.aWeb + ",'_blank');");
+*@
+
+
+ {{#Data}}
+ <div class="text-left">     
+<img id="imgLG" src="/Content/UnPng108/{{UniId}}.png" />
+</div>
+<h3 id="h3Uni">{{Uni}}</h3>
+<h4><small>{{{ifDV isDevlet}}}</small></h4>
+<hr />
+  <div class="col-xs-12 col-sm-6 col-md-4">
+<img id="loadingimg" class="hidden" src="/Content/Img/load.gif"/>
+   <h3 class="panel-title uDetPanel"><i class="fa fa-university"></i> Genel</h3>
+   <div class="panel panel-default">
+
+  <div class="panel-body">
+    <table id="tblGenel" class="table table-hover">
+        <tbody>
+            <tr><td>Kuruluş</td><td>{{Kurulus}}</td></tr>
+            <tr><td>Şehir</td><td>{{Sehir}}&#64;{{Bolge}}</td></tr>
+            <tr><td>Adres</td><td>{{Adres}}</td></tr>
+            <tr><td>Telefon</td><td>{{Tel}}</td></tr>
+            <tr><td>Fax</td><td>{{Fax}}</td></tr>
+            <tr><td>E-Posta</td><td>{{EPosta}}</td></tr>
+            <tr><td>Web</td><td class="text-right">
+                <span><button id="btnWeb" type="button" onclick="window.open('{{web}}','_blank');" class="btn btn-primary btn-xs">Web</button></span>
+                <span><button id="btnAWeb" type="button" onclick="window.open('{{aWeb}}','_blank');" class="btn btn-warning btn-xs">Aday Web</button></span>
+            </td></tr>
+        </tbody>
+
+    </table>
+  </div>
+</div>
+
+</div>
+  <div class="col-xs-12 col-sm-6 col-md-4">
+   <h3 class="panel-title uDetPanel"><i class="fa fa-graduation-cap"></i> Öğretim Görevlisi-Öğrenci</h3>
+   <div class="panel panel-default">
+
+  <div class="panel-body">
+            <table class="table table-hover aLft">
+        <tbody>
+
+            <tr><td>Akademik Personel</td><td>{{{sum Prof Docent Ydocent OgrGorevlisi Okutman Uzman ArsGorevlisi}}}</td></tr>
+            <tr><td style="padding-left:32px;"><small>Prof</small></td><td><small>{{Prof}}</small></td></tr>
+            <tr><td style="padding-left:32px;"><small>Doçent</small></td><td><small>{{Docent}}</small></td></tr>
+            <tr><td style="padding-left:32px;"><small>Y.Doçent</small></td><td><small>{{Ydocent}}</small></td></tr>
+            <tr><td style="padding-left:32px;"><small>Öğr. Görevlisi</small></td><td><small>{{OgrGorevlisi}}</small></td></tr>
+            <tr><td style="padding-left:32px;"><small>Arş. Görevlisi</small></td><td><small>{{ArsGorevlisi}}</small></td></tr>
+            <tr><td style="padding-left:32px;"><small>Okutman/Uzman</small></td><td><small>{{Okutman}}/{{Uzman}}</small></td></tr>
+           <tr><td>Öğrenci</td><td id="tdOgr">{{{sum BirOgr IkiOgr}}}</td></tr>
+            <tr><td style="padding-left:32px;"><small>Birinci Öğretim</small></td><td><small>{{BirOgr}}</small></td></tr>
+            <tr><td style="padding-left:32px;"><small>İkinci Öğretim</small></td><td><small>{{IkiOgr}}</small></td></tr>
+        </tbody>
+
+    </table>
+        
+  </div>
+</div>
+
+</div>
+  <div class="col-xs-12 col-sm-6 col-md-4">
+   <h3 class="panel-title uDetPanel"><i class="fa fa-building"></i> Akademik</h3>
+   <div class="panel panel-default">
+
+  <div class="panel-body">
+            <table class="table table-hover aLft">
+        <tbody>
+            <tr><td>Fakulte</td><td>{{Fakulte}}</td></tr>
+           <tr><td>Bölüm</td><td>{{Bolum}}</td></tr>
+           <tr><td>Yüksek Okul</td><td>{{Yuksekokul}}</td></tr>
+           <tr><td>Meslek Y.O.</td><td>{{MYO}}</td></tr>
+           <tr><td>Enstitü</td><td>{{Enstitu}}</td></tr>
+           <tr><td>Araştırma Mer.</td><td>{{ArsUygMer}}</td></tr>
+           <tr><td>Anabilim Dali</td><td>{{AnabilimDali}}</td></tr>
+           <tr><td>Program</td><td>{{Program}}</td></tr>
+           <tr><td>Yüksek Lisans</td><td>{{YuksekLisans}}</td></tr>
+           <tr><td>Doktora</td><td>{{Doktora}}</td></tr>
+
+        </tbody>
+
+    </table>
+  </div>
+</div>
+
+</div>
+
+<div class="row">
+ <div class="col-xs-12 col-sm-12 col-md-12">
+<h3 class="panel-title uDetPanel"><i class="fa fa-university"></i> Bölümler...</h3>
+<hr />
+
+  <table class="table table-hover table-striped table-condensed">
+
+    <tbody id="bolumTX">
+
+    {{#Bolumler}}
+              {{{ifFak Fak}}}  
+              <tr id="{{bId}}">
+                <td><span style="color:#008080">{{BK}}</span>&nbsp;&nbsp;&nbsp;<span>{{Ad}}</span></td>
+                <td class='TextCenter'>{{PT}}</td>
+                <td>{{SU}} Yıl</td>
+                <td class='TextCenter'>{{Kontenjan}}</td>
+                <td class='TextRight'>{{{ifEKP SR}}}</td>
+                <td class='TextRight'>{{{ifEKP EKP}}}</td>
+                <td class='TextRight'>{{Kosullar}}</td>
+              </tr>
+           {{/Bolumler}}
+    </tbody>  
+
+  </table>
+
+
+</div></div>{{/Data}}
+
+    
+</script>
+
+<script type='text/javascript' >
+    Handlebars.registerHelper('ifSH', function (txt) {
+        if (txt != gSH) {
+            gSH = txt;
+            var retStr="";
+            if (gSH != "") retStr = "</div><br />";
+            retStr += "<div class='[ col-xs-12 col-sm-12 col-md-12 ]' ><h4>" + txt + "</h4><hr style='margin-top:0;'/>"
+            return new Handlebars.SafeString(retStr);
+           
+        }
+    });
+    Handlebars.registerHelper('ifFak', function (txt) {
+        if (txt != gFak) {
+            gFak = txt;
+            var retStr = "";            
+            retStr += "<tr><td colspan=8><strong>" + txt + "</strong></td></tr><tr class='altRenk'><td>Bölüm</td><td>P.Tür</td><td>Süre</td><td>Kontenjan</td><td>B.Sıra</td><td>E.K.Puan</td><td>Koşullar</td></tr>"
+            return new Handlebars.SafeString(retStr);
+
+        }
+    });
+    Handlebars.registerHelper('ifDV', function (dv) {
+        var ret="";
+        if (dv==0) ret = 'Vakıf Üniversitesi';
+        if (dv==1) ret = 'Devlet Üniversitesi';
+        if (dv==7) ret = 'KKTC Üniversitesi';
+        if (dv==8) ret = 'Yurtdışı Üniversite';
+        return new Handlebars.SafeString(ret);
+    });
+
+    Handlebars.registerHelper('sum', function () {
+        var sum = 0, v;
+        for (var i = 0; i < arguments.length; i++) {
+            v = parseInt(arguments[i]);
+            if (!isNaN(v)) sum += v;
+        }
+        return sum;
+    });
+</script>
+
+
+
+<div class="row" style="margin-top:1em; min-height:55em">
+<h2>Universiteler...</h2>
+<div class="[ col-xs-12 col-sm-10 col-md-10 ]">
+
+<div class="input-group" style="margin-top:1em; margin-bottom:2em; ">
+
+                <input type="hidden" name="search_param" value="all" id="search_param">         
+                <input type="text" class="form-control" id="txtUniAra" placeholder="Üniversite giriniz...">
+                <span class="input-group-btn">
+                    <button id="btnUniAra" class="btn btn-custom" type="button">Ara!</button>
+                </span>
+            </div>
+
+
+
+    <div id="dvUniLst" class="row">
+
+
+</div>
+
+
+
+
+
+
+</div>
+
+
+
+
+<div class="[ col-sm-2 col-md-2 visible-md visible-sm">
+
+<div  style="border:1px solid #ccc; width:160px;height:600px;background-color:#eee">
+                </div>
+</div>
+</div>
