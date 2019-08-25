@@ -1,6 +1,8 @@
 # BolumTercih
 
-Üniversite bölüm tercih listesi hazırlama ve paylaşım robotu
+Üniversite bölüm tercih listesi hazırlama ve paylaşım robotu.
+
+2015 yılı tercih döneminde devreye alındı ve 2016'da kapatıldı. 
 
 ## Örnek Ekranlar
 
