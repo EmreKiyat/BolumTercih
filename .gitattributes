@@ -1,2 +1,5 @@
- Content/* linguist-vendored
+Content/* linguist-vendored
+JS/* linguist-vendored
+Scripts/* linguist-vendored
 *.css linguist-vendored
+
