@@ -2,16 +2,16 @@
 
 Üniversite bölüm tercih listesi hazırlama ve paylaşım robotu
 
-##Örnek Ekranlar
+## Örnek Ekranlar
 
-###Filtreler
+### Filtreler
 
-###Tercih Listesi
+### Tercih Listesi
 
-###Bölüm Arama
+### Bölüm Arama
 
-###Universiteler Listesi
+### Universiteler Listesi
 
-###Universiteler Filtrelenmiş
+### Universiteler Filtrelenmiş
 
 
