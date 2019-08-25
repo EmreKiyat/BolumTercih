@@ -5,9 +5,10 @@
 ## Örnek Ekranlar
 
 ### Filtreler
-![AnnDN Cloud WebApi Mechanism!](https://anndn.com/Content/Images/Help/DropAuction/DropAuctionGeneralDataFlow.png "AnnDn WebApi Mechanism")
+![BolumTercih Filtreler!](https://github.com/EmreKiyat/BolumTercih/blob/master/DocsImg/FirstScreen.PNG?raw=true "Filtreler")
 
 ### Tercih Listesi
+![BolumTercih Filtreler!](https://github.com/EmreKiyat/BolumTercih/blob/master/DocsImg/TercihListem.PNG?raw=true "Filtreler")
 
 ### Bölüm Arama
 
