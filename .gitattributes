@@ -1,5 +1,6 @@
 Content/* linguist-vendored
 JS/* linguist-vendored
 Scripts/* linguist-vendored
+Views/* linguist-vendored
 *.css linguist-vendored
 
