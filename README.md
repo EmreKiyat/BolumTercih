@@ -4,19 +4,19 @@
 
 ## Örnek Ekranlar
 
-### Filtreler
+#### Filtreler
 ![BolumTercih Filtreler!](https://github.com/EmreKiyat/BolumTercih/blob/master/DocsImg/FirstScreen.PNG?raw=true "Filtreler")
 
-### Tercih Listesi
+#### Tercih Listesi
 ![BolumTercih Listem!](https://github.com/EmreKiyat/BolumTercih/blob/master/DocsImg/TercihListem.PNG?raw=true "Tercih Listem")
 
-### Bölüm Arama
+#### Bölüm Arama
 ![BolumTercih Bolumler!](https://github.com/EmreKiyat/BolumTercih/blob/master/DocsImg/BolumSearch.PNG?raw=true "Bölüm Liste")
 
-### Universiteler Listesi
+#### Universiteler Listesi
 ![BolumTercih Universiteler!](https://github.com/EmreKiyat/BolumTercih/blob/master/DocsImg/UniversiteAra.PNG?raw=true "Üniversite Liste")
 
-### Universiteler Filtrelenmiş
+#### Universiteler Filtrelenmiş
 ![BolumTercih Universiteler!](https://github.com/EmreKiyat/BolumTercih/blob/master/DocsImg/UniversiteAraFiltered.PNG?raw=true "Üniversite Filtreli")
 
 
